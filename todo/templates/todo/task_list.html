@@ -1,0 +1,23 @@
+<h1>To-Do List</h1>
+
+<ul>
+    {% for task in tasks %}
+        <li>
+            {{ task.title }} 
+            {% if task.is_completed %}
+                ✔
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>아직 할 일이 없습니다.</li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<h2>새 할 일 추가</h2>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="title" placeholder="할 일 입력">
+    <button type="submit">추가</button>
+</form>
