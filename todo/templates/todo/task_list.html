@@ -3,9 +3,17 @@
 <ul>
     {% for task in tasks %}
         <li>
-            {{ task.title }} 
+            <form action="{% url 'task_toggle' task.pk %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <input type="checkbox" onchange="this.form.submit()" {% if task.is_completed %}checked{% endif %}>
+            </form>
+            
             {% if task.is_completed %}
-                ✔
+                <span style="text-decoration: line-through; color: gray;">
+                    {{ task.title }}
+                </span>
+            {% else %}  
+                {{ task.title }}
             {% endif %}
         </li>
     {% empty %}
