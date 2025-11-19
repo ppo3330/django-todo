@@ -16,3 +16,20 @@ def task_toggle(request, pk):
     task.is_completed = not task.is_completed
     task.save()
     return redirect('task_list')
+
+def task_edit(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+
+    if request.method == "POST":
+        new_title = request.POST.get("title")
+        if new_title:
+            task.title = new_title
+            task.save()
+            return redirect('task_list')
+
+    return render(request, 'todo/task_edit.html', {'task': task})
+
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.delete()
+    return redirect('task_list')

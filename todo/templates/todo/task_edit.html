@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>할 일 수정</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="title" value="{{ task.title }}" required>
+    <button type="submit" class="btn btn-primary">수정 완료</button>
+    <ul></ul>
+    <a href="{% url 'task_list' %}" class="btn btn-secondary">취소</a>
+</form>
+{% endblock %}

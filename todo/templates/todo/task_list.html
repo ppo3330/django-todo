@@ -1,20 +1,30 @@
-<h1>To-Do List</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>To-Do List</h2>
 
 <ul>
     {% for task in tasks %}
         <li>
-            <form action="{% url 'task_toggle' task.pk %}" method="POST" style="display:inline;">
-                {% csrf_token %}
-                <input type="checkbox" onchange="this.form.submit()" {% if task.is_completed %}checked{% endif %}>
-            </form>
-            
-            {% if task.is_completed %}
-                <span style="text-decoration: line-through; color: gray;">
+            <div>
+                <form action="{% url 'task_toggle' task.pk %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="checkbox" onchange="this.form.submit()" {% if task.is_completed %}checked{% endif %}>
+                </form>
+                
+                {% if task.is_completed %}
+                    <span style="text-decoration: line-through; color: gray;">
+                        {{ task.title }}
+                    </span>
+                {% else %}  
                     {{ task.title }}
-                </span>
-            {% else %}  
-                {{ task.title }}
-            {% endif %}
+                {% endif %}
+            </div>
+
+            <div>
+                <a href="{% url 'task_edit' task.pk %}" class="btn btn-secondary">수정</a>
+                <a href="{% url 'task_delete' task.pk %}" class="btn btn-danger">삭제</a>
+            </div>
         </li>
     {% empty %}
         <li>아직 할 일이 없습니다.</li>
@@ -23,9 +33,10 @@
 
 <hr>
 
-<h2>새 할 일 추가</h2>
+<h3>새 할 일 추가</h3>
 <form method="POST">
     {% csrf_token %}
     <input type="text" name="title" placeholder="할 일 입력">
-    <button type="submit">추가</button>
+    <button type="submit" class="btn btn-primary">추가</button>
 </form>
+{% endblock %}
