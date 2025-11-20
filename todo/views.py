@@ -8,8 +8,21 @@ def task_list(request):
             Task.objects.create(title=title)
         return redirect('task_list')
         
-    tasks = Task.objects.all().order_by('is_completed', '-created_at')
-    return render(request, 'todo/task_list.html', {'tasks': tasks})
+    filter_type = request.GET.get('filter', 'all')
+
+    if filter_type == 'completed':
+        tasks = Task.objects.filter(is_completed=True)
+    elif filter_type == 'active':
+        tasks = Task.objects.filter(is_completed=False)
+    else:
+        tasks = Task.objects.all()
+
+    tasks = tasks.order_by('-created_at')
+
+    return render(request, 'todo/task_list.html', {
+        'tasks': tasks,
+        'filter': filter_type
+    })
 
 def task_toggle(request, pk):
     task = get_object_or_404(Task, pk=pk)

@@ -35,15 +35,23 @@ input[type="text"] {
 }
 
 /* 버튼 공통 */
-a.btn, button, .btn {
-    padding: 4.5px 6px;
-    border: none;
+a.btn, button.btn {
+    display: inline-block;
+    padding: 8px 8px;     /* 버튼 크기 */
     border-radius: 6px;
-    cursor: pointer;
+    border: none;
     text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
     color: white;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
 }
 
+a.btn:hover, button.btn:hover {
+    opacity: 0.9;
+}
 /* 버튼 색상 */
 .btn-primary {
     background-color: #4caf50;
