@@ -1,11 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
+from datetime import date
+from django.db import models
 
 def task_list(request):
     if request.method == "POST":
         title = request.POST.get("title")
+        deadline = request.POST.get("deadline")
+
         if title:
-            Task.objects.create(title=title)
+            Task.objects.create(
+                title=title,
+                deadline=deadline if deadline else None
+            )
         return redirect('task_list')
         
     filter_type = request.GET.get('filter', 'all')
@@ -17,11 +24,26 @@ def task_list(request):
     else:
         tasks = Task.objects.all()
 
-    tasks = tasks.order_by('-created_at')
+    tasks = tasks.order_by(
+        models.Case(
+            models.When(deadline=None, then=1),
+            default=0
+        ),
+        'deadline'
+    )
+
+    today = date.today()
+
+    for t in tasks:
+        if t.deadline:
+            t.dday = (t.deadline - today).days
+        else:
+            t.dday = None
 
     return render(request, 'todo/task_list.html', {
         'tasks': tasks,
-        'filter': filter_type
+        'filter': filter_type,
+        'today': today
     })
 
 def task_toggle(request, pk):
@@ -35,10 +57,14 @@ def task_edit(request, pk):
 
     if request.method == "POST":
         new_title = request.POST.get("title")
+        new_deadline = request.POST.get("deadline")
+
         if new_title:
             task.title = new_title
-            task.save()
-            return redirect('task_list')
+        
+        task.deadline = new_deadline if new_deadline else None
+        task.save()
+        return redirect('task_list')
 
     return render(request, 'todo/task_edit.html', {'task': task})
 
