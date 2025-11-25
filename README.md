@@ -25,7 +25,7 @@ D-Day 기능
 ---
 
 # to-do 미리보기
-![to-do 미리보기](./screenshot/todo_main.png)
+![to-do 미리보기]([./screenshot/todo_main.png](https://raw.githubusercontent.com/ppo3330/django-blog/main/screenshot.PNG))
 
 ---
 
