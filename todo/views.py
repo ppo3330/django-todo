@@ -25,9 +25,11 @@ def task_list(request):
         tasks = Task.objects.all()
 
     tasks = tasks.order_by(
+        'is_completed',
         models.Case(
             models.When(deadline=None, then=1),
-            default=0
+            default=0,
+            output_field=models.IntegerField()
         ),
         'deadline'
     )
